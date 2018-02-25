@@ -1,7 +1,10 @@
 #You need to install "XML" package first.
 #If you don't have it, please execute install.packages("XML") first.
 library("XML")
-libor_temp <- readHTMLTable("http://www.bankrate.com/rates/interest-rates/libor.aspx")
+library(httr)
+tabs <- GET("http://www.bankrate.com/rates/interest-rates/libor.aspx")
+libor_temp <- readHTMLTable(rawToChar(tabs$content), stringsAsFactors = F)
+#libor_temp <- readHTMLTable("http://www.bankrate.com/rates/interest-rates/libor.aspx")
 #This is a list type. List includes any data type. That's why we use double bracket [[]]
 libor_temp <- libor_temp[[1]]
 period_temp <- c("1 month", "3 month", "6 month", "1 year")
@@ -24,3 +27,8 @@ y <- libor$libor
 
 plot(x,y,xlab = "Month", ylab="Libor Rate (%)", ylim=c(0,max(libor$libor)))
 lines(x,y)
+
+
+
+
+
